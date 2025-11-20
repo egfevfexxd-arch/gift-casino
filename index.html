@@ -6,101 +6,30 @@
     <title>NFT Case Opener</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            margin: 0;
-            font-family: system-ui, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+        body{
+            margin:0;
+            background:#0f0f1a;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            position:relative;
         }
-        .case {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(145deg, #ffd700, #b8860b); /* Золотой кейс как твоя картинка */
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-            transition: transform 0.2s ease;
-            position: relative;
-            /* Если твоя картинка: background-image: url('https://твоя_ссылка.png'); background-size: cover; background-position: center; */
+        .case{
+            width:300px;
+            height:300px;
+            background:url('https://i.imgur.com/8QdZ8Z8.png') center/contain no-repeat;
+            cursor:pointer;
+            transition:transform .15s;
+            filter:drop-shadow(0 0 30px #ffd700);
+            animation:pulse 4s infinite;
         }
-        .case::before {
-            content: '🔒'; /* Замок из твоей картинки */
-            font-size: 4rem;
-            z-index: 2;
-        }
-        .case:active {
-            transform: scale(0.9); /* Сжимается при нажатии */
-        }
-        .case.open {
-            animation: bounce 0.6s ease; /* Отпускает и отскакивает */
-        }
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            30% { transform: scale(0.95); }
-            60% { transform: scale(1.02); }
-            100% { transform: scale(1.05); }
-        }
-        .nft {
-            position: absolute;
-            pointer-events: none;
-            animation: fall linear forwards;
-            z-index: 10;
-            top: -10%;
-        }
-        @keyframes fall {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(120vh) rotate(720deg) scale(0.5);
-                opacity: 0;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="case" id="case" onclick="openCase()"></div>
-
-    <script>
-        if (window.Telegram) {
-            Telegram.WebApp.ready();
-            Telegram.WebApp.expand();
-            document.body.style.background = Telegram.WebApp.colorScheme === 'dark' ? '#000' : '#111';
-        }
-
-        function openCase() {
-            const caseEl = document.getElementById('case');
-            caseEl.classList.add('open');
-            setTimeout(() => caseEl.classList.remove('open'), 600);
-
-            // Рандомные Telegram NFT (💫, 🪙, 💎, 🎁, 🏆)
-            const nfts = ['💫', '🪙', '💎', '🎁', '🏆'];
-            const nftCount = Math.floor(Math.random() * 6) + 5; // 5-10 штук
-            for (let i = 0; i < nftCount; i++) {
-                setTimeout(() => {
-                    const nft = document.createElement('div');
-                    nft.className = 'nft';
-                    nft.textContent = nfts[Math.floor(Math.random() * nfts.length)]; // Рандомный NFT
-                    nft.style.left = Math.random() * 90 + 5 + 'vw'; // Рандомная позиция слева
-                    nft.style.top = Math.random() * 20 - 10 + 'vh'; // Начинает чуть выше экрана
-                    nft.style.fontSize = (Math.random() * 40 + 30) + 'px'; // Рандомный размер 30-70px
-                    nft.style.animationDuration = (Math.random() * 4 + 3) + 's'; // Скорость 3-7 сек
-                    nft.style.animationDelay = Math.random() * 0.5 + 's'; // Небольшая задержка
-                    document.body.appendChild(nft);
-                    setTimeout(() => nft.remove(), 8000); // Удалить через 8 сек
-                }, i * 150); // Пауза между выпадениями
-            }
-        }
-    </script>
-</body>
-</html>
+        .case:active{transform:scale(0.88) rotate(-4deg);}
+        .case.open{animation:bounce .7s;}
+        @keyframes pulse{0%,100%{filter:drop-shadow(0 0 30px #ffd700)}50%{filter:drop-shadow(0 0 50px #ff9500)}}
+        @keyframes bounce{
+            0%   {transform:scale(1) rotate(0)}
+            30%  {transform:scale(0.9) rotate(2deg)}
+            60%  {transform:scale(1.08) rotate(-2deg)}
+            100% {transform:scale(
