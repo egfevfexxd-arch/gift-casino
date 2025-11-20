@@ -3,53 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Casino</title>
+    <title>NFT Case Opener</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body{margin:0;font-family:system-ui;background:#000;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-        h1{font-size:2.8rem;color:#ff6b6b;margin:10px}
-        .balance{font-size:2.8rem;color:gold;font-weight:bold;margin:20px}
-        .slot{font-size:6rem;margin:30px;letter-spacing:15px}
-        .btn{padding:20px 60px;font-size:2rem;background:#ff6b6b;border:none;border-radius:50px;color:#fff;margin:15px;cursor:pointer}
-        .games{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:40px}
-        .game{background:#333;padding:20px 35px;border-radius:20px;font-size:1.5rem}
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .case {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(145deg, #ffd700, #b8860b); /* Золотой кейс как твоя картинка */
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s ease;
+            position: relative;
+            /* Если твоя картинка: background-image: url('https://твоя_ссылка.png'); background-size: cover; background-position: center; */
+        }
+        .case::before {
+            content: '🔒'; /* Замок из твоей картинки */
+            font-size: 4rem;
+            z-index: 2;
+        }
+        .case:active {
+            transform: scale(0.9); /* Сжимается при нажатии */
+        }
+        .case.open {
+            animation: bounce 0.6s ease; /* Отпускает и отскакивает */
+        }
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(0.95); }
+            60% { transform: scale(1.02); }
+            100% { transform: scale(1.05); }
+        }
+        .nft {
+            position: absolute;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 10;
+            top: -10%;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(120vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Gift Casino</h1>
-    <div class="balance" id="balance">Баланс: 1000</div>
-    <div class="slot" id="slot">⭐ ⭐ ⭐</div>
-    <button class="btn" onclick="spin()">КРУТИТЬ (-50)</button>
-    <div class="games">
-        <div class="game" onclick="crash()">Crash</div>
-        <div class="game" onclick="roulette()">Рулетка</div>
-        <div class="game" onclick="gift()">Подарок</div>
-    </div>
+    <div class="case" id="case" onclick="openCase()"></div>
 
-<script>
-if (window.Telegram) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
-let bal = 1000;
-const sym = ['','⭐',''];
-function up(){document.getElementById('balance').textContent='Баланс: '+bal+' '}
-function spin(){
-    if(bal<50){alert('Недостаточно баллов!');return}
-    bal-=50; up();
-    document.getElementById('slot').textContent='SPIN';
-    setTimeout(()=>{
-        const a = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
-        const b = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
-        const c = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
-        document.getElementById('slot').textContent = a+' '+b+' '+c;
-        if(a===b && b===c && a!==''){
-            const win = Math.floor(Math.random()*900)+300;
-            bal+=win; up(); alert('JACKPOT! +'+win+' ');
+    <script>
+        if (window.Telegram) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            document.body.style.background = Telegram.WebApp.colorScheme === 'dark' ? '#000' : '#111';
         }
-    },2500)
-}
-function crash(){if(bal>=50){bal-=50; const m=(Math.random()*10+1).toFixed(2); m>2?bal+=50*m&&alert('x'+m+' Выигрыш!'):'CRASH'; up()}}
-function roulette(){if(bal>=30){bal-=30; const c=Math.random()>0.5?'красное':'чёрное'; confirm('Красное?')?(c==='красное'?bal+=60:0):(c==='чёрное'?bal+=60:0); alert(c); up()}}
-function gift(){const g=Math.floor(Math.random()*400)+100; bal+=g; up(); alert('Подарок: +'+g+' ')}
-up();
-</script>
+
+        function openCase() {
+            const caseEl = document.getElementById('case');
+            caseEl.classList.add('open');
+            setTimeout(() => caseEl.classList.remove('open'), 600);
+
+            // Рандомные Telegram NFT (💫, 🪙, 💎, 🎁, 🏆)
+            const nfts = ['💫', '🪙', '💎', '🎁', '🏆'];
+            const nftCount = Math.floor(Math.random() * 6) + 5; // 5-10 штук
+            for (let i = 0; i < nftCount; i++) {
+                setTimeout(() => {
+                    const nft = document.createElement('div');
+                    nft.className = 'nft';
+                    nft.textContent = nfts[Math.floor(Math.random() * nfts.length)]; // Рандомный NFT
+                    nft.style.left = Math.random() * 90 + 5 + 'vw'; // Рандомная позиция слева
+                    nft.style.top = Math.random() * 20 - 10 + 'vh'; // Начинает чуть выше экрана
+                    nft.style.fontSize = (Math.random() * 40 + 30) + 'px'; // Рандомный размер 30-70px
+                    nft.style.animationDuration = (Math.random() * 4 + 3) + 's'; // Скорость 3-7 сек
+                    nft.style.animationDelay = Math.random() * 0.5 + 's'; // Небольшая задержка
+                    document.body.appendChild(nft);
+                    setTimeout(() => nft.remove(), 8000); // Удалить через 8 сек
+                }, i * 150); // Пауза между выпадениями
+            }
+        }
+    </script>
 </body>
 </html>
