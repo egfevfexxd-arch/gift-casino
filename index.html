@@ -3,28 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NFT Case</title>
+<title>Cash Case</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  body{margin:0;background:#0b0b1f;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+  body{margin:0;background:#000;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
   .case{
-    width:300px;height:300px;
-    background:url('https://raw.githubusercontent.com/egfevfexxd-arch/gift-casino/main/2025-11-20%2005.05.23.jpg') center/contain no-repeat;
+    width:360px;height:360px;
+    background:url('https://raw.githubusercontent.com/egfevfexxd-arch/gift-casino/main/IMG_5404.PNG') center/contain no-repeat;
     cursor:pointer;
-    filter:drop-shadow(0 0 40px #ffd700);
-    animation:pulse 4s infinite;
+    filter:drop-shadow(0 0 60px #00ff00);
+    animation:glow 3s infinite alternate;
     transition:transform .15s;
   }
-  .case:active{transform:scale(0.88) rotate(-4deg)}
-  .case.open{animation:bounce .8s}
-  @keyframes pulse{0%,100%{filter:drop-shadow(0 0 40px #ffd700)}50%{filter:drop-shadow(0 0 60px #ffaa00)}}
-  @keyframes bounce{
-    0%   {transform:scale(1)}
-    40%  {transform:scale(0.88)}
-    70%  {transform:scale(1.1)}
-    100% {transform:scale(1.02)}
+  .case:active{transform:scale(0.9)}
+  .case.open{animation:shake .7s}
+  @keyframes glow{from{filter:drop-shadow(0 0 60px #00ff00)}to{filter:drop-shadow(0 0 90px #00ff88)}}
+  @keyframes shake{
+    0%,100%{transform:translate(0,0)}
+    10%,30%,50%,70%{transform:translate(-12px,0)}
+    20%,40%,60%,80%{transform:translate(12px,0)}
   }
-  .nft{position:absolute;font-size:2.8rem;pointer-events:none;animation:fly linear forwards}
+  .item{position:absolute;font-size:3.2rem;pointer-events:none;animation:fly linear forwards}
   @keyframes fly{
     0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
     100%{transform:translate(var(--x),var(--y)) rotate(720deg) scale(0.3);opacity:0}
@@ -33,28 +32,41 @@
 </head>
 <body>
 
-<div class="case" id="c" onclick="o()"></div>
+<div class="case" id="c" onclick="openCase()"></div>
 
 <script>
-Telegram?.WebApp?.ready();Telegram?.WebApp?.expand();
-function o(){
-  const c=document.getElementById('c');c.classList.add('open');setTimeout(()=>c.classList.remove('open'),800);
-  const items=['✨','🪙','💎','🎁','🏆','⭐','💰','🔥','🚀','💜'];
-  const n=8+Math.floor(Math.random()*8);
-  const r=c.getBoundingClientRect();
-  const cx=r.left+r.width/2, cy=r.top+r.height/2;
-  for(let i=0;i<n;i++)setTimeout(()=>{  
-    const e=document.createElement('div');e.className='nft';
-    e.textContent=items[Math.floor(Math.random()*items.length)];
-    e.style.left=cx+'px';e.style.top=cy+'px';
-    e.style.fontSize=(30+Math.random()*45)+'px';
-    e.style.setProperty('--x',(Math.random()-0.5)*550+'px');
-    e.style.setProperty('--y',400+Math.random()*700+'px');
-    e.style.animationDuration=(2.3+Math.random()*2.2)+'s';
-    document.body.appendChild(e);
-    setTimeout(()=>e.remove(),7000);
-  },i*110);
-  Telegram?.WebApp?.HapticFeedback?.impactOccurred?.('medium');
+Telegram?.WebApp?.ready();
+Telegram?.WebApp?.expand();
+
+function openCase(){
+  const c = document.getElementById('c');
+  c.classList.add('open');
+  setTimeout(()=>c.classList.remove('open'),700);
+
+  const items = ['💵','💵','💵','💰','🪙','💎','🎁','🏆','✨','🔥','🚀'];
+  const count = 12 + Math.floor(Math.random()*12); // 12–23 штук
+
+  const rect = c.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+
+  for(let i=0; i<count; i++){
+    setTimeout(()=>{
+      const e = document.createElement('div');
+      e.className = 'item';
+      e.textContent = items[Math.floor(Math.random()*items.length)];
+      e.style.left = cx + 'px';
+      e.style.top = cy + 'px';
+      e.style.fontSize = (40 + Math.random()*60) + 'px';
+      e.style.setProperty('--x', (Math.random()-0.5)*700 + 'px');
+      e.style.setProperty('--y', 500 + Math.random()*800 + 'px');
+      e.style.animationDuration = (2 + Math.random()*2.5) + 's';
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(), 8000);
+    }, i*90);
+  }
+
+  Telegram?.WebApp?.HapticFeedback?.impactOccurred?.('heavy');
 }
 </script>
 </body>
