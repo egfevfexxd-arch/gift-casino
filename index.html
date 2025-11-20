@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Casino</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body{margin:0;font-family:system-ui;background:#000;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+        h1{font-size:2.8rem;color:#ff6b6b;margin:10px}
+        .balance{font-size:2.8rem;color:gold;font-weight:bold;margin:20px}
+        .slot{font-size:6rem;margin:30px;letter-spacing:15px}
+        .btn{padding:20px 60px;font-size:2rem;background:#ff6b6b;border:none;border-radius:50px;color:#fff;margin:15px;cursor:pointer}
+        .games{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:40px}
+        .game{background:#333;padding:20px 35px;border-radius:20px;font-size:1.5rem}
+    </style>
+</head>
+<body>
+    <h1>Gift Casino</h1>
+    <div class="balance" id="balance">Баланс: 1000</div>
+    <div class="slot" id="slot">⭐ ⭐ ⭐</div>
+    <button class="btn" onclick="spin()">КРУТИТЬ (-50)</button>
+    <div class="games">
+        <div class="game" onclick="crash()">Crash</div>
+        <div class="game" onclick="roulette()">Рулетка</div>
+        <div class="game" onclick="gift()">Подарок</div>
+    </div>
+
+<script>
+if (window.Telegram) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
+let bal = 1000;
+const sym = ['','⭐',''];
+function up(){document.getElementById('balance').textContent='Баланс: '+bal+' '}
+function spin(){
+    if(bal<50){alert('Недостаточно баллов!');return}
+    bal-=50; up();
+    document.getElementById('slot').textContent='SPIN';
+    setTimeout(()=>{
+        const a = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
+        const b = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
+        const c = sym.sort(()=>Math.random()-0.5).slice(0,1)[0];
+        document.getElementById('slot').textContent = a+' '+b+' '+c;
+        if(a===b && b===c && a!==''){
+            const win = Math.floor(Math.random()*900)+300;
+            bal+=win; up(); alert('JACKPOT! +'+win+' ');
+        }
+    },2500)
+}
+function crash(){if(bal>=50){bal-=50; const m=(Math.random()*10+1).toFixed(2); m>2?bal+=50*m&&alert('x'+m+' Выигрыш!'):'CRASH'; up()}}
+function roulette(){if(bal>=30){bal-=30; const c=Math.random()>0.5?'красное':'чёрное'; confirm('Красное?')?(c==='красное'?bal+=60:0):(c==='чёрное'?bal+=60:0); alert(c); up()}}
+function gift(){const g=Math.floor(Math.random()*400)+100; bal+=g; up(); alert('Подарок: +'+g+' ')}
+up();
+</script>
+</body>
+</html>
